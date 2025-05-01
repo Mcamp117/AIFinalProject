@@ -12,6 +12,7 @@ This project implements a Snake game with an AI agent trained using Deep Q-Learn
 ## Project Structure
 
 ```
+<package manager files>
 README.md
 model/
     model.pth
@@ -43,7 +44,7 @@ SnakeAI/
 Install dependencies with:
 
 ```sh
-pip install torch numpy matplotlib ipython pygame
+pip install -r requirements.txt
 ```
 
 ## How to Train the AI

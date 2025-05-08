@@ -11,7 +11,6 @@ BATCH_SIZE = 1000
 LR = 0.001
 
 class Agent:
-
     def __init__(self):
         self.n_games = 0
         self.epsilon = 0 # randomness
@@ -27,7 +26,7 @@ class Agent:
         point_r = Point(head.x + 20, head.y)
         point_u = Point(head.x, head.y - 20)
         point_d = Point(head.x, head.y + 20)
-        
+
         dir_l = game.direction == Direction.LEFT
         dir_r = game.direction == Direction.RIGHT
         dir_u = game.direction == Direction.UP
@@ -42,30 +41,30 @@ class Agent:
 
         state = [
             # Danger straight
-            (dir_r and game.is_collision(point_r)) or 
-            (dir_l and game.is_collision(point_l)) or 
-            (dir_u and game.is_collision(point_u)) or 
+            (dir_r and game.is_collision(point_r)) or
+            (dir_l and game.is_collision(point_l)) or
+            (dir_u and game.is_collision(point_u)) or
             (dir_d and game.is_collision(point_d)),
 
             # Danger right
-            (dir_u and game.is_collision(point_r)) or 
-            (dir_d and game.is_collision(point_l)) or 
-            (dir_l and game.is_collision(point_u)) or 
+            (dir_u and game.is_collision(point_r)) or
+            (dir_d and game.is_collision(point_l)) or
+            (dir_l and game.is_collision(point_u)) or
             (dir_r and game.is_collision(point_d)),
 
             # Danger left
-            (dir_d and game.is_collision(point_r)) or 
-            (dir_u and game.is_collision(point_l)) or 
-            (dir_r and game.is_collision(point_u)) or 
+            (dir_d and game.is_collision(point_r)) or
+            (dir_u and game.is_collision(point_l)) or
+            (dir_r and game.is_collision(point_u)) or
             (dir_l and game.is_collision(point_d)),
-            
+
             # Move direction
             dir_l,
             dir_r,
             dir_u,
             dir_d,
-            
-            # Food location 
+
+            # Food location
             game.food.x < game.head.x,  # food left
             game.food.x > game.head.x,  # food right
             game.food.y < game.head.y,  # food up

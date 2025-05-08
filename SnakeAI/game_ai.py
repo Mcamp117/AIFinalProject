@@ -23,13 +23,14 @@ BLUE2 = (0, 100, 255)
 BLACK = (0,0,0)
 
 BLOCK_SIZE = 20
-SPEED = 40
+SPEED = 100_000_000
 
 class SnakeGameAI:
 
     def __init__(self, w=640, h=480):
         self.w = w
         self.h = h
+        self.prev_distance: int
         # init display
         self.display = pygame.display.set_mode((self.w, self.h))
         pygame.display.set_caption('Snake')
@@ -67,12 +68,13 @@ class SnakeGameAI:
             if event.type == pygame.QUIT:
                 pygame.quit()
                 quit()
-        
+
         # 2. move
         prev_distance = self._distance_to_food()  # --- reward shaping: get previous distance
+        self.prev_distance = prev_distance
         self._move(action) # update the head
         self.snake.insert(0, self.head)
-        
+
         # 3. check if game over
         reward = 0
         game_over = False
@@ -90,11 +92,21 @@ class SnakeGameAI:
             self.snake.pop()
             # --- reward shaping: encourage moving closer to food
             new_distance = self._distance_to_food()
+
+            # attempt fix for the spin-in-circles problem
+            if new_distance > self.prev_distance:
+                reward -= 2
+
+                if len(self.snake) > 4:
+                    last_positions = self.snake[:4]
+                    if len(set((p.x, p.y) for p in last_positions)) <= 2:
+                        reward -= 5
+
             if new_distance < prev_distance:
                 reward += 0.5  # small reward for getting closer
             else:
                 reward -= 0.5  # small penalty for getting farther
-        
+
         # 5. update ui and clock
         self._update_ui()
         self.clock.tick(SPEED)
